@@ -33,9 +33,9 @@ class AlertHistoryScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('Alert History', style: TextStyle(color: Colors.black)),
+            // Text('Alert History', style: TextStyle(color: Colors.black)),
 
-            const Spacer(),
+            // const Spacer(),
             IconButton(
               tooltip: 'Refresh',
               onPressed: () => controller.refreshAll(),

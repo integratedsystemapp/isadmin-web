@@ -29,7 +29,7 @@ import 'package:HGPcWeb/app/modules/home/home_controller.dart';
 const _kSidebarBg = Color(0xFF2F3439); // 사이드바 배경
 const _kTextStrong = Color(0xFFF4F6F7); // 타이틀/강조 텍스트
 const _kText = Color(0xFFD0D6DC); // 일반 텍스트/아이콘
-const _kActiveBg = Color(0xFFF1D55D); // 선택된 pill 배경
+const _kActiveBg = Color(0xFF00619D); // 선택된 pill 배경
 const _kActiveFg = Color(0xFF15181B); // 선택 텍스트/아이콘
 const _kHoverTint = Color(0x1FFFFFFF); // hover 틴트
 

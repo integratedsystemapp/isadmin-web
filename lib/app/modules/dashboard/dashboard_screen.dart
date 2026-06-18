@@ -11,11 +11,12 @@ class DashboardScreen extends GetView<DashboardController> {
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          return FocusTraversalGroup( // 포커스 탐색 안정화
+          return FocusTraversalGroup(
+            // 포커스 탐색 안정화
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minWidth: constraints.maxWidth,   // ✅ 가로 제약 추가
+                  minWidth: constraints.maxWidth, // ✅ 가로 제약 추가
                   minHeight: constraints.maxHeight, // 기존 유지
                 ),
                 child: Padding(
@@ -23,16 +24,29 @@ class DashboardScreen extends GetView<DashboardController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      AspectRatio(
-                        aspectRatio: 16 / 6,
+                      // AspectRatio(
+                      //   aspectRatio: 16 / 6,
+                      //   child: ClipRRect(
+                      //     borderRadius: BorderRadius.circular(8),
+                      //     child: Image.asset(
+                      //       'assets/images/dashboard_banner.png',
+                      //       fit: BoxFit.cover,
+                      //       alignment: Alignment.topCenter,
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: 220, // ✅ 높이 직접 제어
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.asset(
                             'assets/images/dashboard_banner.png',
                             fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 16),
 
                       // 카드 그리드
@@ -42,13 +56,19 @@ class DashboardScreen extends GetView<DashboardController> {
                           const gap = 16.0;
 
                           int columns;
-                          if (maxW >= 1400) columns = 5;
-                          else if (maxW >= 1100) columns = 4;
-                          else if (maxW >= 820) columns = 3;
-                          else if (maxW >= 560) columns = 2;
-                          else columns = 1;
+                          if (maxW >= 1400)
+                            columns = 5;
+                          else if (maxW >= 1100)
+                            columns = 4;
+                          else if (maxW >= 820)
+                            columns = 3;
+                          else if (maxW >= 560)
+                            columns = 2;
+                          else
+                            columns = 1;
 
-                          final cardWidth = (maxW - gap * (columns - 1)) / columns;
+                          final cardWidth =
+                              (maxW - gap * (columns - 1)) / columns;
                           final scale = (cardWidth / 220).clamp(0.9, 1.4);
 
                           return Wrap(
@@ -58,32 +78,37 @@ class DashboardScreen extends GetView<DashboardController> {
                               _StatCardReactive(
                                 width: cardWidth,
                                 scale: scale,
-                                title: '가입 고객사',
-                                valueBuilder: () => '${controller.customerCount}개사',
+                                title: 'Customer',
+                                valueBuilder:
+                                    () => '${controller.customerCount}개사',
                               ),
                               _StatCardReactive(
                                 width: cardWidth,
                                 scale: scale,
-                                title: '관리 빌딩 수',
-                                valueBuilder: () => '${controller.buildingCount}개',
+                                title: 'Building',
+                                valueBuilder:
+                                    () => '${controller.buildingCount}개',
                               ),
                               _StatCardReactive(
                                 width: cardWidth,
                                 scale: scale,
-                                title: '관리 Edge 수',
+                                title: 'EdgeAgent Count',
                                 valueBuilder: () => '${controller.edgeCount}개',
                               ),
                               _StatCardReactive(
                                 width: cardWidth,
                                 scale: scale,
-                                title: '금일 경보 수',
-                                valueBuilder: () => '${controller.todayAlertCount}개',
+                                title: 'Today Alert Count',
+                                valueBuilder:
+                                    () => '${controller.todayAlertCount}개',
                               ),
                               _StatCardReactive(
                                 width: cardWidth,
                                 scale: scale,
-                                title: '미확인 경보 수',
-                                valueBuilder: () => '${controller.unconfirmedAlertCount}개',
+                                title: 'Open Alert Count',
+                                valueBuilder:
+                                    () =>
+                                        '${controller.unconfirmedAlertCount}개',
                               ),
                             ],
                           );
@@ -120,11 +145,9 @@ class _StatCardReactive extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      child: Obx(() => _StatCard(
-        title: title,
-        value: valueBuilder(),
-        scale: scale,
-      )),
+      child: Obx(
+        () => _StatCard(title: title, value: valueBuilder(), scale: scale),
+      ),
     );
   }
 }
@@ -147,25 +170,26 @@ class _StatCard extends StatelessWidget {
     final titleSize = 18 * scale;
     final valueSize = 22 * scale;
 
-    return Semantics( // 시맨틱 컨테이너 지정(선택)
+    return Semantics(
+      // 시맨틱 컨테이너 지정(선택)
       container: true,
       child: Container(
         padding: EdgeInsets.all(pad),
         decoration: BoxDecoration(
-          color: const Color(0xFFF1D55D),
+          color: const Color(0xFF00619D),
           borderRadius: BorderRadius.circular(12 * scale),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.apartment_rounded, size: iconSize, color: Colors.black87),
+            Icon(Icons.apartment_rounded, size: iconSize, color: Colors.white),
             SizedBox(height: 12 * scale),
             Text(
               title,
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: titleSize,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
             SizedBox(height: 18 * scale),
@@ -174,7 +198,7 @@ class _StatCard extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 fontSize: valueSize,
-                color: Colors.black87,
+                color: Colors.white,
               ),
             ),
           ],
