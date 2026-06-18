@@ -129,9 +129,9 @@ sealed class AppTheme {
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
 
       // 라벨/힌트/에러 스타일
-      labelStyle: const TextStyle(fontSize: 10, color: Color(0xFF334155)),
-      hintStyle: const TextStyle(fontSize: 10, color: Color(0xFF94A3B8)),
-      errorStyle: const TextStyle(fontSize: 10, color: Color(0xFFDC2626)),
+      labelStyle: const TextStyle(fontSize: 12, color: Color(0xFF334155)),
+      hintStyle: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+      errorStyle: const TextStyle(fontSize: 12, color: Color(0xFFDC2626)),
 
       // 공통 테두리 모양
       border: OutlineInputBorder(
