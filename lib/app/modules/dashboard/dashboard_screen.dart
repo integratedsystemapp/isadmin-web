@@ -24,30 +24,29 @@ class DashboardScreen extends GetView<DashboardController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      AspectRatio(
-                        aspectRatio: 16 / 6,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/dashboard_banner.png',
-                            fit: BoxFit.cover,
-                            alignment: Alignment(0, -0.6),
-                            //alignment: Alignment.topCenter,
-                          ),
-                        ),
-                      ),
-
-                      // SizedBox(
-                      //   height: 220, // ✅ 높이 직접 제어
+                      // AspectRatio(
+                      //   aspectRatio: 16 / 6,
                       //   child: ClipRRect(
                       //     borderRadius: BorderRadius.circular(8),
                       //     child: Image.asset(
                       //       'assets/images/dashboard_banner.png',
                       //       fit: BoxFit.cover,
-                      //       alignment: Alignment.topCenter,
+                      //       alignment: Alignment(0, -0.6),
+                      //       //alignment: Alignment.topCenter,
                       //     ),
                       //   ),
                       // ),
+                      SizedBox(
+                        height: 300, // ✅ 높이 직접 제어
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.asset(
+                            'assets/images/dashboard_banner.png',
+                            fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 16),
 
                       // 카드 그리드
@@ -116,6 +115,7 @@ class DashboardScreen extends GetView<DashboardController> {
                         },
                       ),
 
+                      const SizedBox(height: 16),
                       const SizedBox(height: 16),
                     ],
                   ),
