@@ -37,7 +37,7 @@ class DashboardScreen extends GetView<DashboardController> {
                       //   ),
                       // ),
                       SizedBox(
-                        height: 300, // ✅ 높이 직접 제어
+                        height: 700, // ✅ 높이 직접 제어
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.asset(
