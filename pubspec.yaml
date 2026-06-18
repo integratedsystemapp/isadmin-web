@@ -26,7 +26,7 @@ dependencies:
   image_picker: ^1.1.2
   scrollview_observer: ^1.23.0      # jump to index
   flutter_slidable: ^3.1.1          # 리스트뷰 아이템 삭제
-  google_fonts: 5.1.0              # 구글 폰트
+  # google_fonts: 5.1.0              # 구글 폰트
   flex_color_scheme: ^8.0.1         # theme
   animated_text_kit: ^4.2.2
   widget_and_text_animator: ^1.1.5

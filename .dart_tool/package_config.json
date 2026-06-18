@@ -578,12 +578,6 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "google_fonts",
-      "rootUri": "file:///C:/Users/jparkc1/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-5.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.14"
-    },
-    {
       "name": "graphs",
       "rootUri": "file:///C:/Users/jparkc1/AppData/Local/Pub/Cache/hosted/pub.dev/graphs-2.3.2",
       "packageUri": "lib/",

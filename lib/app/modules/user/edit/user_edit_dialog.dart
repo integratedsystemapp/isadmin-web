@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import '../../../../core/values/consts.dart';
 import '../../../data/model/user_model.dart';
 
+import './user_edit_controller.dart';
+
 class UserEditDialog extends StatefulWidget {
   final String mode; // '등록' 또는 '수정'
   final UserModel initialData;
@@ -105,6 +107,15 @@ class _UserEditDialogState extends State<UserEditDialog> {
       // final saved = await userController.updateUser(updated);
       // Get.back(result: saved);
 
+      final controller = Get.put(UserEditController());
+
+      controller.initFields(updated); // ✅ 데이터 넣기
+
+      final saved = await controller.updateUser(); // ✅ 파라미터
+
+      Get.back(result: saved);
+      Get.delete<UserEditController>();
+
       widget.onSave?.call(updated);
       Get.back(result: updated);
     } catch (e, stack) {
@@ -166,7 +177,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('사용자 이름')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('사용자 이름'),
+                        ),
                         Expanded(
                           child: TextFormField(
                             controller: _userNameController,
@@ -193,7 +207,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('휴대폰 번호')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('휴대폰 번호'),
+                        ),
                         Expanded(
                           child: TextFormField(
                             controller: _mobilePhoneController,
@@ -308,7 +325,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('로컬관리자 여부')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('로컬관리자 여부'),
+                        ),
                         const Spacer(),
                         Switch(
                           value: _isLocalAdmin,
@@ -357,7 +377,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('앱경보 수신 여부')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('앱경보 수신 여부'),
+                        ),
                         const Spacer(),
                         Switch(
                           value: _isReceiveAppAlert,
@@ -378,7 +401,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('알림톡 수신 여부')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('알림톡 수신 여부'),
+                        ),
                         const Spacer(),
                         Switch(
                           value: _isReceiveKakaoAlert,
@@ -399,7 +425,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('SMS 수신 여부')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('SMS 수신 여부'),
+                        ),
                         const Spacer(),
                         Switch(
                           value: _isReceiveSms,
@@ -420,7 +449,10 @@ class _UserEditDialogState extends State<UserEditDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text('*', style: TextStyle(color: Colors.red)),
-                        const SizedBox(width: labelWidth, child: Text('TTS 수신 여부')),
+                        const SizedBox(
+                          width: labelWidth,
+                          child: Text('TTS 수신 여부'),
+                        ),
                         const Spacer(),
                         Switch(
                           value: _isReceiveTts,
@@ -461,10 +493,7 @@ class _UserEditDialogState extends State<UserEditDialog> {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _onCancel,
-          child: const Text('취소'),
-        ),
+        TextButton(onPressed: _onCancel, child: const Text('취소')),
         ElevatedButton(
           onPressed: _onSubmit,
           child: Text(widget.mode == '등록' ? '등록' : '저장'),

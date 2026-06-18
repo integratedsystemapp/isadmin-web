@@ -1,482 +1,3 @@
-// import 'package:HGPcWeb/app/modules/user/user_controller.dart';
-// import 'package:data_table_2/data_table_2.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import '../../../core/theme/typo.dart';
-// import '../../../core/values/consts.dart';
-// import '../common/show_custom_snackbar.dart';
-// import '../common/widget/TableCellText.dart';
-// import '../common/widget/TableColumnText.dart';
-// import '../common/widget/confirm_approve.dart';
-// import '../common/widget/confirm_delete.dart';
-// import 'edit/user_edit_dialog.dart';
-//
-// class UserScreen extends StatelessWidget {
-//   const UserScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final controller = UserController.to;
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         titleSpacing: 0,
-//         automaticallyImplyLeading: false,
-//         title: Row(
-//           children: [
-//             const Spacer(),
-//             /*
-//             등록
-//              */
-//             // ElevatedButton(
-//             //   onPressed: () async {
-//             //     // 등록 로직
-//             //     final result = await showDialog(
-//             //       context: context,
-//             //       builder:
-//             //           (_) => CustomerEditDialog(
-//             //         mode: '등록',
-//             //         initialData: CustomerModel(companyCd: '', companyName: ''),
-//             //         // initialData: selectedCustomerData,
-//             //         onSave: (updated) {
-//             //           print('저장된 데이터: $updated');
-//             //
-//             //           controller.customerList.add(updated);
-//             //         },
-//             //       ),
-//             //     );
-//             //
-//             //     if (result != null) {
-//             //       controller.customerList.add(result);
-//             //       showCustomSnackbar('성공', '고객 정보 등록이  완료 되었습니다.');
-//             //     } else {
-//             //       showCustomSnackbar('성공', '고객 정보 등록이 실패 했습니다.');
-//             //     }
-//             //
-//             //
-//             //   },
-//             //   child: const Text('등록'),
-//             // ),
-//             // const SizedBox(width: 8),
-//             /*
-//             수정
-//              */
-//             ElevatedButton(
-//               onPressed: () async {
-//                 // 수정 로직
-//                 if (controller.selected.isNotEmpty) {
-//                   final _user = controller.getSelected()!;
-//                   final result = await showDialog(
-//                     context: context,
-//                     builder:
-//                         (_) => UserEditDialog(
-//                       mode: '수정',
-//                       initialData: _user, // 첫 번째 고객 데이터로 초기화
-//                       // initialData: selectedCustomerData,
-//                       onSave: (updated) {
-//                         print('저장된 데이터: $updated');
-//
-//                       },
-//                     ),
-//                   );
-//
-//                   debugPrint('===================================>');
-//                   if (result != null) {
-//                     final _index = controller.userList.indexWhere((e) => e.userId == result.userId);
-//
-//                     debugPrint('=====>${result.toString()}');
-//                     debugPrint('_index:${_index}');
-//
-//                     if (_index >= 0) {
-//                       controller.userList[_index] = result;
-//                       showCustomSnackbar('성공', '사용자 정보 수정이  완료 되었습니다.');
-//                     } else {
-//                       showCustomSnackbar('성공', '사용자 정보 수정이 실패 했습니다.');
-//                     }
-//
-//                   }
-//
-//                 } else {
-//                   showCustomSnackbar('안내', '수정 할 사용자를 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('수정'),
-//             ),
-//             const SizedBox(width: 8),
-//             /*
-//             상단 승인 버튼
-//              */
-//             ElevatedButton(
-//               onPressed: () async {
-//                 // 삭제 로직
-//                 if (controller.selected.isNotEmpty) {
-//                   final _isApproved = controller.getSelected()!.isApproved;
-//                   if(_isApproved == 'Y') {
-//                     showCustomSnackbar('안내', '이미 승인된 사용자 입니다.');
-//                     return;
-//                   }
-//                   final _userId = controller.getSelected()!.userId;
-//                   final result = await confirmApprove(_userId);
-//                   if (result == true) {
-//                     try {
-//                       await controller.approveUser(_userId);
-//                       debugPrint('승인 성공!');
-//                       showCustomSnackbar('성공', '사용자 승인이  완료 되었습니다.');
-//                     } catch (e) {
-//                       debugPrint('승인 실패 또는 취소됨: $e');
-//                       showCustomSnackbar('오류', '사용자 승인이 실패 했습니다.: $e');
-//                     }
-//                   }
-//                 } else {
-//                   showCustomSnackbar('안내', '승인 할 사용자를 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('승인'),
-//             ),
-//             const SizedBox(width: 8),
-//
-//             /*
-//             상단 삭제 버튼
-//              */
-//             ElevatedButton(
-//               onPressed: () async {
-//                 // 삭제 로직
-//                 if (controller.selected.isNotEmpty) {
-//                   final _userId = controller.getSelected()!.userId;
-//                   final result = await confirmDelete(_userId);
-//                   if (result == true) {
-//                     try {
-//                       await controller.deleteUser(_userId);
-//                       debugPrint('삭제 성공!');
-//                       final index = controller.userList.indexWhere((e) => e.userId == _userId);
-//                       if (index >= 0) {
-//                         controller.userList.removeAt(index);
-//                       }
-//                       // showCustomSnackbar('성공', '사욜자 정보 삭제가  완료 되었습니다.');
-//                     } catch (e) {
-//                       debugPrint('삭제 실패 또는 취소됨: $e');
-//                       // showCustomSnackbar('오류', '고객 정보 삭제가 실패 했습니다.: $e');
-//                     }
-//                   }
-//                 } else {
-//                   showCustomSnackbar('안내', '삭제 할 고객을 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('삭제'),
-//             ),
-//
-//             const SizedBox(width: 16),
-//           ],
-//         ),
-//       ),
-//
-//       body: Padding(
-//           padding: const EdgeInsets.all(DATATABLE_MARGIN),
-//           child: Obx(() {
-//
-//             // debugPrint('Obx Obx Obx ==> ${controller.userList.length}');
-//
-//             return DataTable2(
-//               scrollController: controller.controller,
-//               horizontalScrollController: controller.horizontalController,
-//               columnSpacing: 0,
-//               // horizontalMargin: 12,
-//               // bottomMargin: 10,
-//               minWidth: 2000,
-//               headingRowColor: MaterialStateProperty.all(Colors.grey.shade200), // 헤더 배경색
-//               sortColumnIndex: controller.sortColumnIndex,
-//               sortAscending: controller.sortAscending,
-//               columns: [
-//                 DataColumn2(label: Center(child: TableColumnText('선택')), fixedWidth: 50),
-//                 // DataColumn2(label: Center(child: TableColumnText('사용자ID')), size: ColumnSize.S ),
-//                 DataColumn2(label: Center(child: TableColumnText('사용자ID')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('사용자이름')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('휴대폰번호')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('회사명')), fixedWidth: 200),
-//                 DataColumn2(label: Center(child: TableColumnText('부서명')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('직급')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('로컬관리자\n여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('빌딩코드')), fixedWidth: 150),
-//                 DataColumn2(label: Center(child: TableColumnText('앱경보\n수신여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('일림톡\n수신여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('SMS\n수신여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('TTS\n수신여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('승인여부')), fixedWidth: 100),
-//                 DataColumn2(label: Center(child: TableColumnText('등록일')), fixedWidth: 150),
-//                 DataColumn2(label: Center(child: TableColumnText('수정일')), fixedWidth: 150),
-//
-//                 // ...columns.map((title) => DataColumn2(label: Text(title)))
-//               ],
-//               rows: List.generate(controller.userList.length, (index) {
-//                 final user = controller.userList[index];
-//
-//                 // debugPrint('Obx Obx Obx ==> ${controller.userList.length}');
-//
-//                 return DataRow2.byIndex(
-//                   index: index,
-//                   selected: controller.isSelected(index),
-//                   onTap: () => controller.toggleSelection(index),
-//
-//                   cells:
-//                   [
-//                     //  승인된 사용자는 체크박스 숨기기
-//                     (user.isApproved == 'Y') ? DataCell(Text(''))
-//                         : DataCell(Center(child: Checkbox(value: controller.isSelected(index),
-//                         onChanged: (_) => controller.toggleSelection(index)
-//                   ))),
-//                     DataCell(Center(child: TableCellText(user.userId))),
-//                     DataCell(Center(child: TableCellText(user.userName ?? ''))),
-//                     DataCell(Center(child: TableCellText(user.mobilePhoneNo ?? ''))),
-//                     DataCell(Center(child: TableCellText(user.companyName ?? ''))),
-//                     DataCell(Center(child: TableCellText(user.department ?? ''))),
-//                     DataCell(Center(child: TableCellText(user.position ?? ''))),
-//                     DataCell(Center(child: TableCellText(user.isLocalAdmin))),
-//                     DataCell(Center(child: TableCellText(user.buildingCd))),
-//                     DataCell(Center(child: TableCellText(user.isReceiveAppAlert))),
-//                     DataCell(Center(child: TableCellText(user.isReceiveKakaoAlert))),
-//                     DataCell(Center(child: TableCellText(user.isReceiveSms))),
-//                     DataCell(Center(child: TableCellText(user.isReceiveTts))),
-//                     DataCell(Center(child: TableCellText(user.isApproved))),
-//                     DataCell(Center(child: TableCellText(user.formatCreateAt()))),
-//                     DataCell(Center(child: TableCellText(user.formatUpdatedAt() ))),
-//                   ].map((cell) => DataCell(DefaultTextStyle.merge(style: TextStyle(fontSize: 14), child: cell.child))).toList(),
-//                 );
-//               }),
-//             );
-//           }),
-//         ),
-//     );
-//   }
-// }
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-//
-// import 'package:HGPcWeb/app/modules/user/user_controller.dart';
-// import 'package:data_table_2/data_table_2.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// import '../common/show_custom_snackbar.dart';
-// import '../common/widget/TableCellText.dart';
-// import '../common/widget/TableColumnText.dart';
-// import '../common/widget/confirm_approve.dart';
-// import '../common/widget/confirm_delete.dart';
-// import 'edit/user_edit_dialog.dart';
-//
-// class UserScreen extends StatelessWidget {
-//   const UserScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final controller = UserController.to;
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         titleSpacing: 0,
-//         automaticallyImplyLeading: false,
-//         title: Row(
-//           children: [
-//             const Spacer(),
-//             // 수정
-//             ElevatedButton(
-//               onPressed: () async {
-//                 if (controller.selected.isNotEmpty) {
-//                   final selected = controller.getSelected()!;
-//                   final result = await showDialog(
-//                     context: context,
-//                     builder: (_) => UserEditDialog(
-//                       mode: '수정',
-//                       initialData: selected,
-//                       onSave: (_) {},
-//                     ),
-//                   );
-//                   if (result != null) {
-//                     final idx = controller.userList.indexWhere((e) => e.userId == result.userId);
-//                     if (idx >= 0) {
-//                       controller.userList[idx] = result;
-//                       showCustomSnackbar('성공', '사용자 정보 수정이  완료 되었습니다.');
-//                     } else {
-//                       showCustomSnackbar('실패', '사용자 정보 수정에 실패했습니다.');
-//                     }
-//                   }
-//                 } else {
-//                   showCustomSnackbar('안내', '수정 할 사용자를 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('수정'),
-//             ),
-//             const SizedBox(width: 8),
-//
-//             // 승인
-//             ElevatedButton(
-//               onPressed: () async {
-//                 if (controller.selected.isNotEmpty) {
-//                   final selected = controller.getSelected()!;
-//                   if (selected.isApproved == 'Y') {
-//                     showCustomSnackbar('안내', '이미 승인된 사용자 입니다.');
-//                     return;
-//                   }
-//                   final ok = await confirmApprove(selected.userId);
-//                   if (ok == true) {
-//                     try {
-//                       await controller.approveUser(selected.userId);
-//                       showCustomSnackbar('성공', '사용자 승인이  완료 되었습니다.');
-//                     } catch (e) {
-//                       showCustomSnackbar('오류', '사용자 승인이 실패 했습니다.: $e');
-//                     }
-//                   }
-//                 } else {
-//                   showCustomSnackbar('안내', '승인 할 사용자를 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('승인'),
-//             ),
-//             const SizedBox(width: 8),
-//
-//             // 삭제
-//             ElevatedButton(
-//               onPressed: () async {
-//                 if (controller.selected.isNotEmpty) {
-//                   final userId = controller.getSelected()!.userId;
-//                   final ok = await confirmDelete(userId);
-//                   if (ok == true) {
-//                     try {
-//                       await controller.deleteUser(userId);
-//                       final idx = controller.userList.indexWhere((e) => e.userId == userId);
-//                       if (idx >= 0) controller.userList.removeAt(idx);
-//                       showCustomSnackbar('성공', '사용자 삭제가  완료 되었습니다.');
-//                     } catch (e) {
-//                       showCustomSnackbar('오류', '사용자 삭제가 실패 했습니다.: $e');
-//                     }
-//                   }
-//                 } else {
-//                   showCustomSnackbar('안내', '삭제 할 사용자를 선택 해 주세요');
-//                 }
-//               },
-//               child: const Text('삭제'),
-//             ),
-//             const SizedBox(width: 16),
-//           ],
-//         ),
-//       ),
-//
-//       // ===== 본문: 좌우 여백 없이, 브라우저 폭에 맞춰 확장 (DiScreen 패턴 동일) =====
-//       body: SafeArea(
-//         left: false,
-//         right: false,
-//         child: LayoutBuilder(
-//           builder: (context, constraints) {
-//             // 기본 최소 너비(모든 fixedWidth 합보다 약간 크게). 필요 시 조정
-//             const double baseMinWidth = 2000;
-//             final double tableMinWidth =
-//             constraints.maxWidth > baseMinWidth ? constraints.maxWidth : baseMinWidth;
-//
-//             return Obx(() {
-//               return Container(
-//                 width: double.infinity,   // 가용 폭 전부 사용
-//                 padding: EdgeInsets.zero, // 여백 제거
-//                 child: DataTable2(
-//                   scrollController: controller.controller,
-//                   horizontalScrollController: controller.horizontalController,
-//
-//                   // 좌우 여백/간격 최소화
-//                   horizontalMargin: 0,
-//                   columnSpacing: 0,
-//                   minWidth: tableMinWidth,
-//
-//                   headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
-//                   sortColumnIndex: controller.sortColumnIndex,
-//                   sortAscending: controller.sortAscending,
-//
-//                   columns: const [
-//                     DataColumn2(label: Center(child: TableColumnText('선택')), fixedWidth: 50),
-//                     DataColumn2(label: Center(child: TableColumnText('사용자ID')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('사용자이름')), size: ColumnSize.M),
-//                     DataColumn2(label: Center(child: TableColumnText('휴대폰번호')), size: ColumnSize.M),
-//                     // 화면이 넓어질 때 자연스럽게 늘어나게 하려면 아래 3개 중 하나 이상을 가변 컬럼으로 바꿔도 됩니다.
-//                     // 예) size: ColumnSize.L 로 변경
-//                     DataColumn2(label: Center(child: TableColumnText('회사명')), size: ColumnSize.L),
-//                     // DataColumn2(label: Center(child: TableColumnText('회사명')), fixedWidth: 200),
-//                     DataColumn2(label: Center(child: TableColumnText('부서명')), size: ColumnSize.L),
-//                     DataColumn2(label: Center(child: TableColumnText('직급')), size: ColumnSize.L),
-//                     DataColumn2(label: Center(child: TableColumnText('로컬관리자\n여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('빌딩코드')), size: ColumnSize.L),
-//                     DataColumn2(label: Center(child: TableColumnText('앱경보\n수신여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('일림톡\n수신여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('SMS\n수신여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('TTS\n수신여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('승인여부')), fixedWidth: 100),
-//                     DataColumn2(label: Center(child: TableColumnText('등록일')), fixedWidth: 150),
-//                     DataColumn2(label: Center(child: TableColumnText('수정일')), fixedWidth: 150),
-//                   ],
-//
-//                   rows: List.generate(controller.userList.length, (index) {
-//                     final user = controller.userList[index];
-//
-//                     return DataRow2.byIndex(
-//                       index: index,
-//                       selected: controller.isSelected(index),
-//                       onTap: () => controller.toggleSelection(index),
-//                       cells: [
-//                         // 승인된 사용자는 체크박스 숨기기
-//                         (user.isApproved == 'Y')
-//                             ? const DataCell(SizedBox.shrink())
-//                             : DataCell(
-//                           Center(
-//                             child: Checkbox(
-//                               value: controller.isSelected(index),
-//                               onChanged: (_) => controller.toggleSelection(index),
-//                             ),
-//                           ),
-//                         ),
-//                         DataCell(Center(child: TableCellText(user.userId))),
-//                         DataCell(Center(child: TableCellText(user.userName ?? ''))),
-//                         DataCell(Center(child: TableCellText(user.mobilePhoneNo ?? ''))),
-//                         DataCell(Center(child: TableCellText(user.companyName ?? ''))),
-//                         DataCell(Center(child: TableCellText(user.department ?? ''))),
-//                         DataCell(Center(child: TableCellText(user.position ?? ''))),
-//                         DataCell(Center(child: TableCellText(user.isLocalAdmin))),
-//                         DataCell(Center(child: TableCellText(user.buildingCd))),
-//                         DataCell(Center(child: TableCellText(user.isReceiveAppAlert))),
-//                         DataCell(Center(child: TableCellText(user.isReceiveKakaoAlert))),
-//                         DataCell(Center(child: TableCellText(user.isReceiveSms))),
-//                         DataCell(Center(child: TableCellText(user.isReceiveTts))),
-//                         DataCell(Center(child: TableCellText(user.isApproved))),
-//                         DataCell(Center(child: TableCellText(user.formatCreateAt()))),
-//                         DataCell(Center(child: TableCellText(user.formatUpdatedAt()))),
-//                       ]
-//                           .map((cell) => DataCell(
-//                         DefaultTextStyle.merge(
-//                           style: const TextStyle(fontSize: 14),
-//                           child: cell.child,
-//                         ),
-//                       ))
-//                           .toList(),
-//                     );
-//                   }),
-//                 ),
-//               );
-//             });
-//           },
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 import 'dart:math' as math;
 
 import 'package:HGPcWeb/app/data/model/user_model.dart';
@@ -516,26 +37,28 @@ class UserScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            SizedBox(width: 10,),
-            Text('사용자 관리', style: TextStyle(color: Colors.black),),
+            SizedBox(width: 10),
+            Text('사용자 관리', style: TextStyle(color: Colors.black)),
 
             const Spacer(),
             // 수정
             ElevatedButton(
               onPressed: () async {
-
                 if (controller.selected.isNotEmpty) {
                   final selected = controller.getSelected()!;
                   final result = await showDialog<UserModel>(
                     context: context,
-                    builder: (_) => UserEditDialog(
-                      mode: '수정',
-                      initialData: selected,
-                      onSave: (_) {},
-                    ),
+                    builder:
+                        (_) => UserEditDialog(
+                          mode: '수정',
+                          initialData: selected,
+                          onSave: (_) {},
+                        ),
                   );
                   if (result != null) {
-                    final idx = controller.userList.indexWhere((e) => e.userId == result.userId);
+                    final idx = controller.userList.indexWhere(
+                      (e) => e.userId == result.userId,
+                    );
                     if (idx >= 0) {
                       controller.userList[idx] = result;
                       showCustomSnackbar('성공', '사용자 정보 수정이 완료되었습니다.');
@@ -586,7 +109,9 @@ class UserScreen extends StatelessWidget {
                   if (ok == true) {
                     try {
                       await controller.deleteUser(userId);
-                      final idx = controller.userList.indexWhere((e) => e.userId == userId);
+                      final idx = controller.userList.indexWhere(
+                        (e) => e.userId == userId,
+                      );
                       if (idx >= 0) controller.userList.removeAt(idx);
                       showCustomSnackbar('성공', '사용자 삭제가 완료되었습니다.');
                     } catch (e) {
@@ -617,49 +142,93 @@ class UserScreen extends StatelessWidget {
             final bool useFixedWidths = availableW >= _kEnableFixedIfWiderThan;
 
             // 화면이 넓으면 끝까지, 아니면 가로 스크롤
-            final double tableMinWidth = math.max(_kBaselineMinWidth, availableW);
+            final double tableMinWidth = math.max(
+              _kBaselineMinWidth,
+              availableW,
+            );
 
             // 동적 컬럼 구성(고정/가변을 가용폭에 따라 스위칭)
             List<DataColumn2> buildColumns() {
               return [
                 // 선택
                 useFixedWidths
-                    ? const DataColumn2(label: Center(child: TableColumnText('선택')), fixedWidth: 50)
-                    : const DataColumn2(label: Center(child: TableColumnText('선택'))),
+                    ? const DataColumn2(
+                      label: Center(child: TableColumnText('선택')),
+                      fixedWidth: 50,
+                    )
+                    : const DataColumn2(
+                      label: Center(child: TableColumnText('선택')),
+                    ),
 
                 // 사용자ID
                 useFixedWidths
-                    ? const DataColumn2(label: Center(child: TableColumnText('사용자ID')), fixedWidth: 110)
-                    : const DataColumn2(label: Center(child: TableColumnText('사용자ID'))),
+                    ? const DataColumn2(
+                      label: Center(child: TableColumnText('사용자ID')),
+                      fixedWidth: 110,
+                    )
+                    : const DataColumn2(
+                      label: Center(child: TableColumnText('사용자ID')),
+                    ),
 
                 // 가변 컬럼들
-                const DataColumn2(label: Center(child: TableColumnText('사용자이름'))),
-                const DataColumn2(label: Center(child: TableColumnText('휴대폰번호'))),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('사용자이름')),
+                ),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('휴대폰번호')),
+                ),
                 const DataColumn2(label: Center(child: TableColumnText('회사명'))),
                 const DataColumn2(label: Center(child: TableColumnText('부서명'))),
                 const DataColumn2(label: Center(child: TableColumnText('직급'))),
-                const DataColumn2(label: Center(child: TableColumnText('로컬관리자\n여부'))),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('로컬관리자\n여부')),
+                ),
 
                 // 빌딩코드(식별성 위해 넓을 때만 고정)
                 useFixedWidths
-                    ? const DataColumn2(label: Center(child: TableColumnText('빌딩코드')), fixedWidth: 160)
-                    : const DataColumn2(label: Center(child: TableColumnText('빌딩코드'))),
+                    ? const DataColumn2(
+                      label: Center(child: TableColumnText('빌딩코드')),
+                      fixedWidth: 160,
+                    )
+                    : const DataColumn2(
+                      label: Center(child: TableColumnText('빌딩코드')),
+                    ),
 
                 const DataColumn2(label: Center(child: TableColumnText('빌딩명'))),
 
-                const DataColumn2(label: Center(child: TableColumnText('앱경보\n수신여부'))),
-                const DataColumn2(label: Center(child: TableColumnText('일림톡\n수신여부'))),
-                const DataColumn2(label: Center(child: TableColumnText('SMS\n수신여부'))),
-                const DataColumn2(label: Center(child: TableColumnText('TTS\n수신여부'))),
-                const DataColumn2(label: Center(child: TableColumnText('승인여부'))),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('앱경보\n수신여부')),
+                ),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('일림톡\n수신여부')),
+                ),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('SMS\n수신여부')),
+                ),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('TTS\n수신여부')),
+                ),
+                const DataColumn2(
+                  label: Center(child: TableColumnText('승인여부')),
+                ),
 
                 // 등록/수정일(넓을 때만 고정)
                 useFixedWidths
-                    ? const DataColumn2(label: Center(child: TableColumnText('등록일')), fixedWidth: 150)
-                    : const DataColumn2(label: Center(child: TableColumnText('등록일'))),
+                    ? const DataColumn2(
+                      label: Center(child: TableColumnText('등록일')),
+                      fixedWidth: 150,
+                    )
+                    : const DataColumn2(
+                      label: Center(child: TableColumnText('등록일')),
+                    ),
                 useFixedWidths
-                    ? const DataColumn2(label: Center(child: TableColumnText('수정일')), fixedWidth: 150)
-                    : const DataColumn2(label: Center(child: TableColumnText('수정일'))),
+                    ? const DataColumn2(
+                      label: Center(child: TableColumnText('수정일')),
+                      fixedWidth: 150,
+                    )
+                    : const DataColumn2(
+                      label: Center(child: TableColumnText('수정일')),
+                    ),
               ];
             }
 
@@ -679,7 +248,9 @@ class UserScreen extends StatelessWidget {
                   // 화면이 넓으면 끝까지, 좁으면 가로 스크롤
                   minWidth: tableMinWidth,
 
-                  headingRowColor: MaterialStateProperty.all(Colors.grey.shade200),
+                  headingRowColor: MaterialStateProperty.all(
+                    Colors.grey.shade200,
+                  ),
                   sortColumnIndex: controller.sortColumnIndex,
                   sortAscending: controller.sortAscending,
 
@@ -692,44 +263,118 @@ class UserScreen extends StatelessWidget {
                       index: index,
                       selected: controller.isSelected(index),
                       onTap: () => controller.toggleSelection(index),
-                      cells: [
-                        // 승인된 사용자는 체크박스 숨김
-                        (user.isApproved == 'Y')
-                            ? const DataCell(SizedBox.shrink())
-                            : DataCell(
-                          Center(
-                            child: Checkbox(
-                              value: controller.isSelected(index),
-                              onChanged: (_) => controller.toggleSelection(index),
-                            ),
-                          ),
-                        ),
-                        DataCell(Center(child: TableCellText(user.userId))),
-                        DataCell(Center(child: TableCellText(user.userName ?? ''))),
-                        DataCell(Center(child: TableCellText(user.mobilePhoneNo ?? ''))),
-                        DataCell(Center(child: TableCellText(user.companyName ?? ''))),
-                        DataCell(Center(child: TableCellText(user.department ?? ''))),
-                        DataCell(Center(child: TableCellText(user.position ?? ''))),
-                        DataCell(Center(child: TableCellText(user.isLocalAdmin))),
-                        DataCell(Center(child: TableCellText(user.buildingCd))),
-                        DataCell(Center(child: TableCellText(user.buildingName??'-'))),
-                        DataCell(Center(child: TableCellText(user.isReceiveAppAlert))),
-                        DataCell(Center(child: TableCellText(user.isReceiveKakaoAlert))),
-                        DataCell(Center(child: TableCellText(user.isReceiveSms))),
-                        DataCell(Center(child: TableCellText(user.isReceiveTts))),
-                        DataCell(Center(child: TableCellText(user.isApproved))),
-                        DataCell(Center(child: TableCellText(user.formatCreateAt()))),
-                        DataCell(Center(child: TableCellText(user.formatUpdatedAt()))),
-                      ]
-                          .map(
-                            (c) => DataCell(
-                          DefaultTextStyle.merge(
-                            style: const TextStyle(fontSize: 14),
-                            child: c.child,
-                          ),
-                        ),
-                      )
-                          .toList(),
+                      cells:
+                          [
+                                // 승인된 사용자는 체크박스 숨김
+                                (user.isApproved == 'Y')
+                                    ? const DataCell(SizedBox.shrink())
+                                    : DataCell(
+                                      Center(
+                                        child: Checkbox(
+                                          value: controller.isSelected(index),
+                                          onChanged:
+                                              (_) => controller.toggleSelection(
+                                                index,
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                DataCell(
+                                  Center(child: TableCellText(user.userId)),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.userName ?? ''),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.mobilePhoneNo ?? '',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.companyName ?? '',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.department ?? ''),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.position ?? ''),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.isLocalAdmin),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(child: TableCellText(user.buildingCd)),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.buildingName ?? '-',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.isReceiveAppAlert,
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.isReceiveKakaoAlert,
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.isReceiveSms),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.isReceiveTts),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(child: TableCellText(user.isApproved)),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(user.formatCreateAt()),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      user.formatUpdatedAt(),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                              .map(
+                                (c) => DataCell(
+                                  DefaultTextStyle.merge(
+                                    style: const TextStyle(fontSize: 14),
+                                    child: c.child,
+                                  ),
+                                ),
+                              )
+                              .toList(),
                     );
                   }),
                 ),
