@@ -33,7 +33,7 @@ class AlertSendHistoryScreen extends StatelessWidget {
 
             const Spacer(),
             IconButton(
-              tooltip: '새로고침',
+              tooltip: 'Refresh',
               onPressed: () => controller.refreshAll(),
               icon: const Icon(Icons.refresh, color: Colors.black),
             ),
@@ -188,14 +188,14 @@ class AlertSendHistoryScreen extends StatelessWidget {
                                           DataCell(
                                             Center(
                                               child: TableCellText(
-                                                a.id.toString(),
+                                                a.id?.toString() ?? '-',
                                               ),
                                             ),
                                           ),
                                           DataCell(
                                             Center(
                                               child: TableCellText(
-                                                a.alertId.toString(),
+                                                a.alertId?.toString() ?? '-',
                                               ),
                                             ),
                                           ),
@@ -303,7 +303,7 @@ class AlertSendHistoryScreen extends StatelessWidget {
                                           DataCell(
                                             Center(
                                               child: TableCellText(
-                                                a.diNo.toString(),
+                                                a.diNo?.toString() ?? '-',
                                               ),
                                             ),
                                           ),

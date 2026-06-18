@@ -10,7 +10,7 @@ import 'app/modules/inactivity/inactivity_watcher.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   Get.put(AppController(), permanent: true);
@@ -29,12 +29,12 @@ void main() async{
   };
 
   runApp(
-    InactivityWatcher(child:
-      GetMaterialApp(
+    InactivityWatcher(
+      child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         smartManagement: SmartManagement.keepFactory,
-        navigatorKey: Get.key,  // global build context
-        title: 'IS IoT Platform',
+        navigatorKey: Get.key, // global build context
+        title: 'Integrated System',
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
         themeMode: ThemeMode.light,
@@ -53,9 +53,7 @@ void main() async{
         // initialRoute: Routes.PUBLISHER_SELECT,
         // initialRoute: Routes.QUIZ,
         getPages: AppRoutes.pages,
-
-      )
-    )
+      ),
+    ),
   );
 }
-

@@ -13,9 +13,7 @@ import '../common/show_custom_snackbar.dart';
 
 import 'contract/contract_send.dart';
 
-
 class CustomerController extends GetxController {
-
   static CustomerController get to {
     if (Get.isRegistered<CustomerController>()) {
       return Get.find<CustomerController>();
@@ -26,31 +24,38 @@ class CustomerController extends GetxController {
 
   final selected = <int>{}.obs;
   final customerList = <CustomerModel>[].obs;
-  final selectedCustomer = CustomerModel(
-    companyCd: '',
-    companyName: '',
-    businessRegistrationNo: null,
-    address: null,
-    companyPhoneNo: null,
-    ceoName: null,
-    businessTypeCd: null,
-    businessItem: null,
-    managerName: null,
-    managerPosition: null,
-    managerTelNo: null,
-    managerMobileNo: null,
-    managerEmail: null,
-    invoiceIssueDate: null,
-    contractAmount: null,
-    eformsignDocId: null,
-  ).obs;
+  final selectedCustomer =
+      CustomerModel(
+        companyCd: '',
+        companyName: '',
+        businessRegistrationNo: null,
+        address: null,
+        companyPhoneNo: null,
+        ceoName: null,
+        businessTypeCd: null,
+        businessItem: null,
+        managerName: null,
+        managerPosition: null,
+        managerTelNo: null,
+        managerMobileNo: null,
+        managerEmail: null,
+        invoiceIssueDate: null,
+        contractAmount: null,
+        eformsignDocId: null,
+      ).obs;
 
   final sortColumnIndex = 1.obs;
   // final sortColumnIndex = RxnInt(); // null 허용
   final sortAscending = true.obs;
 
   // T는 Comparable (String, num, DateTime 등)
-  int _cmp<T extends Comparable>(T? a, T? b, {bool ascending = true, bool nullsLast = true, bool caseInsensitive = true}) {
+  int _cmp<T extends Comparable>(
+    T? a,
+    T? b, {
+    bool ascending = true,
+    bool nullsLast = true,
+    bool caseInsensitive = true,
+  }) {
     Comparable? x = a;
     Comparable? y = b;
 
@@ -70,18 +75,18 @@ class CustomerController extends GetxController {
   }
 
   void sortBy<T extends Comparable>(
-      T? Function(CustomerModel e) getField,
-      int columnIndex,
-      bool ascending,
-      ) {
-    customerList.sort((a, b) => _cmp<T>(getField(a), getField(b), ascending: ascending));
-    sortColumnIndex.value = columnIndex;   // 이제 null 가능
+    T? Function(CustomerModel e) getField,
+    int columnIndex,
+    bool ascending,
+  ) {
+    customerList.sort(
+      (a, b) => _cmp<T>(getField(a), getField(b), ascending: ascending),
+    );
+    sortColumnIndex.value = columnIndex; // 이제 null 가능
     sortAscending.value = ascending;
   }
 
-
   void toggleSelection(int index) {
-
     if (selected.isNotEmpty && selected.first == index) {
       // 선택 토글
       selected.clear();
@@ -94,8 +99,6 @@ class CustomerController extends GetxController {
 
     return;
 
-
-
     if (selected.contains(index)) {
       selected.remove(index);
     } else {
@@ -104,7 +107,8 @@ class CustomerController extends GetxController {
   }
 
   bool isSelected(int index) => selected.contains(index);
-  CustomerModel? getSelected() => (selected.isNotEmpty) ? customerList[selected.first] : null;
+  CustomerModel? getSelected() =>
+      (selected.isNotEmpty) ? customerList[selected.first] : null;
 
   final ScrollController controller = ScrollController();
   final ScrollController horizontalController = ScrollController();
@@ -112,8 +116,8 @@ class CustomerController extends GetxController {
   // int? sortColumnIndex;
   bool initialized = false;
   RxBool isLoading = false.obs;
-  var selectedCustomerCd = RxnString();  // dropdown list
-  var selectedCustomerName = RxnString();// dropdown list
+  var selectedCustomerCd = RxnString(); // dropdown list
+  var selectedCustomerName = RxnString(); // dropdown list
 
   Future<void> fetchCustomers() async {
     try {
@@ -135,7 +139,6 @@ class CustomerController extends GetxController {
       debugPrint('Error fetching customers: $e');
     }
   }
-
 
   @override
   void onInit() {
@@ -175,7 +178,9 @@ class CustomerController extends GetxController {
   void setSelectedCustomer(String? value) {
     debugPrint('setSelectedCustomer--------------------------${value}');
     final _companyCd = value!.split('(')[0];
-    final index = this.customerList.indexWhere((e)=>e.companyCd == _companyCd);
+    final index = this.customerList.indexWhere(
+      (e) => e.companyCd == _companyCd,
+    );
     if (index < 0) {
       debugPrint('CustomerController:setSelectedCustomer index oob:${index}');
       return;
@@ -184,26 +189,30 @@ class CustomerController extends GetxController {
     selectedCustomerName.value = this.customerList[index].companyName;
     selectedCustomerCd.value = _companyCd;
 
-    debugPrint('selectedCustomerName.value--------------------------${selectedCustomerName.value}');
+    debugPrint(
+      'selectedCustomerName.value--------------------------${selectedCustomerName.value}',
+    );
     debugPrint('index--------------------------${index}');
-    debugPrint('selectedCustomerCd.value--------------------------${selectedCustomerCd.value}');
-
+    debugPrint(
+      'selectedCustomerCd.value--------------------------${selectedCustomerCd.value}',
+    );
   }
 
   /*
   계약서 발송
    */
-  Future<String?> sendContractDocument(ContractSendModel constractSendModel) async {
+  Future<String?> sendContractDocument(
+    ContractSendModel constractSendModel,
+  ) async {
     String documentId = ''; // api 결과
 
     String? managerMobileNo = constractSendModel.managerMobile; // 담당자 휴대폰
     final managerEmail = constractSendModel.managerEmail; // 담당자 이메일
-    String? managerName = constractSendModel.managerName;  // 담당자이름
+    String? managerName = constractSendModel.managerName; // 담당자이름
     String? companyName = constractSendModel.companyName;
     String? companyCd = constractSendModel.companyCd;
 
     debugPrint('managerEmail:${managerEmail}, companyCd:${companyCd}');
-
 
     managerMobileNo = managerMobileNo?.replaceAll('-', '');
 
@@ -212,7 +221,7 @@ class CustomerController extends GetxController {
       "manager_mobile_no": managerMobileNo,
       "manager_email": managerEmail,
       "company_name": companyName,
-      "company_cd": companyCd
+      "company_cd": companyCd,
     };
 
     // null/빈문자열 제거
@@ -230,7 +239,9 @@ class CustomerController extends GetxController {
         final responseDataMap = response.data as Map<String, dynamic>;
         documentId = responseDataMap['document_id'];
 
-        debugPrint("[debug] respone.data ${response.data as Map<String, dynamic>}");
+        debugPrint(
+          "[debug] respone.data ${response.data as Map<String, dynamic>}",
+        );
         showCustomSnackbar('성공', '계약서(${documentId}) 발송이 완료 되었습니다.');
       } else {
         print('4...........');
@@ -251,23 +262,22 @@ class CustomerController extends GetxController {
         showCustomSnackbar('이폼사인', '계약서 발송을 할 수 없습니다.(사용한도 초과)');
         throw Exception(test);
       }
-
-
     } on DioException catch (e) {
       final data = e.response?.data;
-      final msg = (data is Map && data['detail'] is Map)
-          ? data['detail']['message'] ?? data['detail'].toString()
-          : (data is Map ? data['message'] ?? data['error'] ?? data.toString()
-          : e.message ?? 'network error');
+      final msg =
+          (data is Map && data['detail'] is Map)
+              ? data['detail']['message'] ?? data['detail'].toString()
+              : (data is Map
+                  ? data['message'] ?? data['error'] ?? data.toString()
+                  : e.message ?? 'network error');
       print('❌ $msg');
-    // } on DioException catch (e) {
-    //   final msg = humanMessageFromDio(e);
-    //   print('❌ $e');
-    //   print('❌ $msg');
-    //   // showCustomSnackbar('에러', msg);
-    //   showCustomSnackbar('에러', '계약서 발송 실패 했습니다.');
-
-    } catch (e,st) {
+      // } on DioException catch (e) {
+      //   final msg = humanMessageFromDio(e);
+      //   print('❌ $e');
+      //   print('❌ $msg');
+      //   // showCustomSnackbar('에러', msg);
+      //   showCustomSnackbar('에러', '계약서 발송 실패 했습니다.');
+    } catch (e, st) {
       debugPrint('❌Error sendContractDocument: $e');
       debugPrint('$st'); // ← 스택트레이스로 정확한 파일/라인 확인
       debugPrint('네트워크 오류: $e');
@@ -275,40 +285,50 @@ class CustomerController extends GetxController {
     }
 
     return documentId;
-
-
   }
-
 
   /*
   다운로드
    */
-  Future<void> saveBytesImpl(List<int> bytes, String filename, String mimeType) async {
+  Future<void> saveBytesImpl(
+    List<int> bytes,
+    String filename,
+    String mimeType,
+  ) async {
     final blob = html.Blob([bytes], mimeType);
     final url = html.Url.createObjectUrlFromBlob(blob);
-    final anchor = html.AnchorElement(href: url)
-      ..download = filename
-      ..style.display = 'none';
+    final anchor =
+        html.AnchorElement(href: url)
+          ..download = filename
+          ..style.display = 'none';
     html.document.body!.append(anchor);
     anchor.click();
     anchor.remove();
     html.Url.revokeObjectUrl(url);
   }
+
   // 테스트
   String? _extractFileName(String contentDisposition) {
     // filename*=UTF-8''xxx.zip 또는 filename="xxx.zip" 모두 처리
-    final utf8Match = RegExp(r"filename\*\s*=\s*UTF-8''([^;]+)").firstMatch(contentDisposition);
+    final utf8Match = RegExp(
+      r"filename\*\s*=\s*UTF-8''([^;]+)",
+    ).firstMatch(contentDisposition);
     if (utf8Match != null) return Uri.decodeComponent(utf8Match.group(1)!);
 
-    final asciiMatch = RegExp(r'filename\s*=\s*"([^"]+)"').firstMatch(contentDisposition)
-        ?? RegExp(r'filename\s*=\s*([^;]+)').firstMatch(contentDisposition);
+    final asciiMatch =
+        RegExp(r'filename\s*=\s*"([^"]+)"').firstMatch(contentDisposition) ??
+        RegExp(r'filename\s*=\s*([^;]+)').firstMatch(contentDisposition);
     return asciiMatch?.group(1)?.trim();
   }
+
   Future<void> downloadZipWithHttp(String url) async {
-    final resp = await http.get(Uri.parse(url), headers: {
-      'Accept': 'application/zip',
-    });
-    final fileName = _extractFileName(resp.headers['content-disposition'] ?? '') ?? 'document.zip';
+    final resp = await http.get(
+      Uri.parse(url),
+      headers: {'Accept': 'application/zip'},
+    );
+    final fileName =
+        _extractFileName(resp.headers['content-disposition'] ?? '') ??
+        'document.zip';
 
     final bytes = Uint8List.fromList(resp.bodyBytes);
     final blob = html.Blob([bytes], 'application/zip');
@@ -321,9 +341,6 @@ class CustomerController extends GetxController {
     html.Url.revokeObjectUrl(urlObj);
   }
 
-
-
-
   Future<void> downloadDocument(String eformSignDocId) async {
     // final _dio = Dio();
 
@@ -331,9 +348,11 @@ class CustomerController extends GetxController {
       // 서버 API URL (FastAPI 라우터)
       final url = 'http://localhost:8000/eformsign/download/$eformSignDocId';
 
-      final resp = await ApiService().get2('/eformsign/download/$eformSignDocId');
+      final resp = await ApiService().get2(
+        '/eformsign/download/$eformSignDocId',
+      );
 
-        /*
+      /*
       final resp = await _dio.get<List<int>>(
         url,
         options: Options(
@@ -345,14 +364,12 @@ class CustomerController extends GetxController {
       );
       */
 
-
-
-
       print('status=${resp.statusCode}');
       print('headers=${resp.headers}');
 
       if (resp.statusCode == 200 && resp.data != null) {
-        final filename = 'eformsign_${eformSignDocId}.pdf'; // 서버도 동일 이름을 내려주면 더 깔끔
+        final filename =
+            'eformsign_${eformSignDocId}.pdf'; // 서버도 동일 이름을 내려주면 더 깔끔
         await saveBytesImpl(resp.data!, filename, 'application/pdf');
       } else {
         if (resp.data != null) {
@@ -364,15 +381,11 @@ class CustomerController extends GetxController {
             if (code == '4000004') {
               //The document does not exist.
               showCustomSnackbar('안내', '다큐먼트가 존재하지 않습니다.');
-
             }
-
           } catch (_) {}
         }
         throw Exception('다운로드 실패: ${resp.statusCode} ${resp.statusMessage}');
       }
-
-
     } catch (e) {
       print('🚨 오류 발생: $e');
     }
@@ -382,10 +395,10 @@ class CustomerController extends GetxController {
   첨부파일 다운로드(계약서)
    */
   Future<void> downloadAttachDocument(String eformSignDocId) async {
-
     try {
-
-      final resp = await ApiService().get2('/eformsign/download/attach/$eformSignDocId');
+      final resp = await ApiService().get2(
+        '/eformsign/download/attach/$eformSignDocId',
+      );
 
       print('status=${resp.statusCode}');
       print('headers=${resp.headers}');
@@ -398,10 +411,11 @@ class CustomerController extends GetxController {
       }
 
       if (resp.statusCode == 200 && resp.data != null) {
-
         // 2) Content-Type: application/zip 인지 확인 (환경에 따라 octet-stream일 수도 있으므로 느슨하게)
         final ct = (resp.headers.value('content-type') ?? '').toLowerCase();
-        final isZipContentType = ct.contains('application/zip') || ct.contains('application/x-zip-compressed');
+        final isZipContentType =
+            ct.contains('application/zip') ||
+            ct.contains('application/x-zip-compressed');
 
         // 3) Content-Length가 최소 EOCD(End Of Central Directory) 22바이트 이상인지
         final clHeader = resp.headers.value('content-length');
@@ -410,7 +424,8 @@ class CustomerController extends GetxController {
 
         // 4) 바디 앞 2바이트가 ZIP 시그니처 "PK" (0x50, 0x4B) 인지
         final data = Uint8List.fromList(resp.data ?? const []);
-        final isZipMagic = data.length >= 2 && data[0] == 0x50 && data[1] == 0x4B;
+        final isZipMagic =
+            data.length >= 2 && data[0] == 0x50 && data[1] == 0x4B;
 
         bool isAttachExists = true;
         // 최종 판단(보수적): 200 + (zip 헤더 or zip content-type) + 길이 OK
@@ -424,15 +439,10 @@ class CustomerController extends GetxController {
           return;
         }
 
-
-
-
-        final filename = 'eformsign_attach_${eformSignDocId}.zip'; // 서버도 동일 이름을 내려주면 더 깔끔
+        final filename =
+            'eformsign_attach_${eformSignDocId}.zip'; // 서버도 동일 이름을 내려주면 더 깔끔
         await saveBytesImpl(resp.data!, filename, 'application/zip');
-
-
       } else {
-
         if (resp.data != null) {
           // 서버가 JSON/text로 에러를 내려줬다면 확인
           try {
@@ -442,16 +452,12 @@ class CustomerController extends GetxController {
             if (code == '4000004') {
               //The document does not exist.
               showCustomSnackbar('안내', '첨부파일이 존재하지 않습니다.');
-
             }
-
           } catch (_) {}
         }
 
         throw Exception('다운로드 실패: ${resp.statusCode} ${resp.statusMessage}');
       }
-
-
     } catch (e) {
       print('🚨 오류 발생: $e');
     }
@@ -459,12 +465,12 @@ class CustomerController extends GetxController {
 
   // 테스트
   Future<void> downloadZip(String url) async {
-    final dio = Dio(BaseOptions(
-      responseType: ResponseType.bytes,   // 중요: raw bytes로 받기
-      headers: {
-        'Accept': 'application/zip',
-      },
-    ));
+    final dio = Dio(
+      BaseOptions(
+        responseType: ResponseType.bytes, // 중요: raw bytes로 받기
+        headers: {'Accept': 'application/zip'},
+      ),
+    );
 
     final resp = await dio.get<List<int>>(url);
 
@@ -480,9 +486,10 @@ class CustomerController extends GetxController {
     final urlObj = html.Url.createObjectUrlFromBlob(blob);
 
     // 가짜 a 태그 클릭 → 다운로드 시작
-    final anchor = html.AnchorElement(href: urlObj)
-      ..download = fileName
-      ..style.display = 'none';
+    final anchor =
+        html.AnchorElement(href: urlObj)
+          ..download = fileName
+          ..style.display = 'none';
     html.document.body!.children.add(anchor);
     anchor.click();
     anchor.remove();
@@ -493,8 +500,6 @@ class CustomerController extends GetxController {
   /*
   첨부파일 다운로드(사업자등록증)
    */
-
-
 }
 
 // data를 Map으로 표준화 (Map 그대로 / JSON 문자열 / 이중인코딩 / 파이썬 dict 문자열까지 가급적 처리)
@@ -543,7 +548,8 @@ String extractFastApiMessage(dynamic root) {
 
   // detail이 Map (서버가 {"detail":{"message":"..."}} 로 준 경우)
   if (detail is Map) {
-    final m = detail['message'] ??
+    final m =
+        detail['message'] ??
         detail['ErrorMessage'] ?? // 외부 서비스 에러 키 대응
         detail['E:'] ??
         detail['error'] ??
@@ -554,14 +560,16 @@ String extractFastApiMessage(dynamic root) {
 
   // FastAPI ValidationError: detail: [ {loc,msg,type}, ... ]
   if (detail is List) {
-    return detail.map((e) {
-      if (e is Map) {
-        final loc = (e['loc'] is List) ? (e['loc'] as List).join('.') : '';
-        final msg = e['msg'] ?? e['message'] ?? e['error'] ?? 'invalid';
-        return loc.isNotEmpty ? '$loc: $msg' : '$msg';
-      }
-      return e.toString();
-    }).join('\n');
+    return detail
+        .map((e) {
+          if (e is Map) {
+            final loc = (e['loc'] is List) ? (e['loc'] as List).join('.') : '';
+            final msg = e['msg'] ?? e['message'] ?? e['error'] ?? 'invalid';
+            return loc.isNotEmpty ? '$loc: $msg' : '$msg';
+          }
+          return e.toString();
+        })
+        .join('\n');
   }
 
   // 서버가 최상위에 message만 준 경우

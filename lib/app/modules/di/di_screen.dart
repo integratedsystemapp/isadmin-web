@@ -212,7 +212,6 @@
 //   }
 // }
 
-
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -355,23 +354,29 @@ class DiScreen extends StatelessWidget {
       //     ],
       //   ),
       // ),
-
       appBar: AppBar(
         titleSpacing: 0,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
             const SizedBox(width: 10),
-            const Text('Digital Input 관리', style: TextStyle(color: Colors.black)),
+            const Text(
+              'Digital Input 관리',
+              style: TextStyle(color: Colors.black),
+            ),
 
             const Spacer(),
 
             // 🔎 검색 위젯
             ConstrainedBox(
-              constraints: const BoxConstraints.tightFor(width: 320, height: 36),
+              constraints: const BoxConstraints.tightFor(
+                width: 320,
+                height: 36,
+              ),
               child: TextField(
                 controller: controller.searchCtrl,
-                onChanged: controller.onSearchChanged,   // 300ms 디바운스 내장 (컨트롤러 코드 아래)
+                onChanged:
+                    controller.onSearchChanged, // 300ms 디바운스 내장 (컨트롤러 코드 아래)
                 onSubmitted: controller.onSearchChanged, // Enter로 즉시 검색
                 textInputAction: TextInputAction.search,
                 style: const TextStyle(fontSize: 14),
@@ -379,16 +384,22 @@ class DiScreen extends StatelessWidget {
                   isDense: true,
                   hintText: '검색 (회사/빌딩)',
                   prefixIcon: const Icon(Icons.search, size: 18),
-                  suffixIcon: Obx(() => controller.searchText.value.isEmpty
-                      ? const SizedBox.shrink()
-                      : IconButton(
-                    tooltip: '지우기',
-                    icon: const Icon(Icons.close, size: 18),
-                    onPressed: controller.clearSearch,
-                  )),
+                  suffixIcon: Obx(
+                    () =>
+                        controller.searchText.value.isEmpty
+                            ? const SizedBox.shrink()
+                            : IconButton(
+                              tooltip: '지우기',
+                              icon: const Icon(Icons.close, size: 18),
+                              onPressed: controller.clearSearch,
+                            ),
+                  ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 0,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,
@@ -404,23 +415,24 @@ class DiScreen extends StatelessWidget {
               onPressed: () async {
                 final result = await showDialog(
                   context: context,
-                  builder: (_) => DiEditDialog(
-                    mode: '등록',
-                    initialData: DiModel(
-                      companyCd: '',
-                      buildingCd: '',
-                      edgeCd: '',
-                      diNo: -1,
-                      alertLevelCd: '',
-                      alertCategoryCd: '',
-                      isAlertReceivable: '',
-                      alertStatusType: '',
-                    ),
-                    onSave: (updated) {
-                      controller.diList.value.add(updated);
-                      controller.diList.refresh();
-                    },
-                  ),
+                  builder:
+                      (_) => DiEditDialog(
+                        mode: '등록',
+                        initialData: DiModel(
+                          companyCd: '',
+                          buildingCd: '',
+                          edgeCd: '',
+                          diNo: -1,
+                          alertLevelCd: '',
+                          alertCategoryCd: '',
+                          isAlertReceivable: '',
+                          alertStatusType: '',
+                        ),
+                        onSave: (updated) {
+                          controller.diList.value.add(updated);
+                          controller.diList.refresh();
+                        },
+                      ),
                 );
                 if (result != null) {
                   showCustomSnackbar('성공', 'DI 정보 등록이 완료되었습니다.');
@@ -439,19 +451,22 @@ class DiScreen extends StatelessWidget {
                   final selected = controller.getSelected()!;
                   final result = await showDialog(
                     context: context,
-                    builder: (_) => DiEditDialog(
-                      mode: '수정',
-                      initialData: selected,
-                      onSave: (updated) {},
-                    ),
+                    builder:
+                        (_) => DiEditDialog(
+                          mode: '수정',
+                          initialData: selected,
+                          onSave: (updated) {},
+                        ),
                   );
 
                   if (result != null) {
-                    final idx = controller.diList.indexWhere((e) =>
-                    e.companyCd == result.companyCd &&
-                        e.buildingCd == result.buildingCd &&
-                        e.edgeCd == result.edgeCd &&
-                        e.diNo == result.diNo);
+                    final idx = controller.diList.indexWhere(
+                      (e) =>
+                          e.companyCd == result.companyCd &&
+                          e.buildingCd == result.buildingCd &&
+                          e.edgeCd == result.edgeCd &&
+                          e.diNo == result.diNo,
+                    );
                     if (idx >= 0) {
                       controller.diList[idx] = result;
                       showCustomSnackbar('성공', 'DI 정보 수정이 완료되었습니다.');
@@ -472,15 +487,19 @@ class DiScreen extends StatelessWidget {
               onPressed: () async {
                 if (controller.selected.isNotEmpty) {
                   final target = controller.getSelected()!;
-                  final ok = await confirmDelete('${target.edgeCd}-${target.diNo}');
+                  final ok = await confirmDelete(
+                    '${target.edgeCd}-${target.diNo}',
+                  );
                   if (ok == true) {
                     try {
                       await controller.deleteDi(target);
-                      final index = controller.diList.indexWhere((e) =>
-                      e.companyCd == target.companyCd &&
-                          e.buildingCd == target.buildingCd &&
-                          e.edgeCd == target.edgeCd &&
-                          e.diNo == target.diNo);
+                      final index = controller.diList.indexWhere(
+                        (e) =>
+                            e.companyCd == target.companyCd &&
+                            e.buildingCd == target.buildingCd &&
+                            e.edgeCd == target.edgeCd &&
+                            e.diNo == target.diNo,
+                      );
                       if (index >= 0) {
                         controller.diList.removeAt(index);
                       }
@@ -508,7 +527,7 @@ class DiScreen extends StatelessWidget {
           builder: (context, constraints) {
             // CustomerScreen과 동일한 패턴: 화면이 넓어지면 테이블도 같이 확장
             final double tableMinWidth =
-            constraints.maxWidth > 2670 ? constraints.maxWidth : 2670;
+                constraints.maxWidth > 2670 ? constraints.maxWidth : 2670;
 
             return Obx(() {
               return Container(
@@ -612,90 +631,155 @@ class DiScreen extends StatelessWidget {
                       index: index,
                       selected: controller.isSelected(index),
                       onTap: () => controller.toggleSelection(index),
-                      cells: [
-                        // 선택
-                        DataCell(
-                          Center(
-                            child: Checkbox(
-                              value: controller.isSelected(index),
-                              onChanged: (_) => controller.toggleSelection(index),
-                            ),
-                          ),
-                        ),
-
-                        DataCell(Center(child: TableCellText(di.companyCd))),
-                        DataCell(Center(child: TableCellText(di.companyName??'-'))),
-                        DataCell(Center(child: TableCellText(di.buildingCd??'-'))),
-                        DataCell(Center(child: TableCellText(di.buildingName??'-'))),
-                        DataCell(Center(child: TableCellText(di.edgeCd))),
-                        DataCell(Center(child: TableCellText(di.edgeName??'-'))),
-                        DataCell(Center(child: TableCellText(di.diNo.toString()))),
-                        DataCell(Center(child: TableCellText(di.diName ?? ''))),
-                        DataCell(Center(child: TableCellText(di.floorInfo ?? ''))),
-
-                        // Map/SOP 파일명은 길 수 있으니 Tooltip + 말줄임
-                        DataCell(
-                          Center(
-                            child: Tooltip(
-                              message: di.mapImageFileName ?? '',
-                              child: TableCellText(di.mapImageFileName ?? ''),
-                            ),
-                          ),
-                        ),
-                        DataCell(
-                          Center(
-                            child: Tooltip(
-                              message: di.sopImageFileName ?? '',
-                              child: TableCellText(di.sopImageFileName ?? ''),
-                            ),
-                          ),
-                        ),
-
-                        DataCell(
-                          Center(
-                            child: TableCellText(alertLevelDesc(di.alertLevelCd)),
-                          ),
-                        ),
-                        DataCell(
-                          Center(
-                            child: TableCellText(alertCategoryDesc(di.alertCategoryCd)),
-                          ),
-                        ),
-                        DataCell(Center(child: TableCellText(di.isAlertReceivable ?? ''))),
-                        DataCell(
-                          Center(
-                            child: TableCellText(alertStatusDesc(di.alertStatusType)),
-                          ),
-                        ),
-
-                        // 기본 연결 문자열(가변 폭 셀): 좌측 정렬 + Tooltip + 말줄임
-                        DataCell(
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Tooltip(
-                                    message: di.defaultConnectionString ?? '',
-                                    child: TableCellText(di.defaultConnectionString ?? ''),
+                      cells:
+                          [
+                                // 선택
+                                DataCell(
+                                  Center(
+                                    child: Checkbox(
+                                      value: controller.isSelected(index),
+                                      onChanged:
+                                          (_) =>
+                                              controller.toggleSelection(index),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
 
-                        DataCell(Center(child: TableCellText(di.formatCreateAt()))),
-                        DataCell(Center(child: TableCellText(di.formatUpdatedAt()))),
-                      ]
-                      // 공통 텍스트 스타일(필요 시): 이미 TableCellText 내부에서 처리 중이면 생략 가능
-                          .map((c) => DataCell(
-                        DefaultTextStyle.merge(
-                          style: const TextStyle(fontSize: 14),
-                          child: c.child,
-                        ),
-                      ))
-                          .toList(),
+                                DataCell(
+                                  Center(child: TableCellText(di.companyCd)),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.companyName ?? '-'),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.buildingCd ?? '-'),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      di.buildingName ?? '-',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(child: TableCellText(di.edgeCd)),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.edgeName ?? '-'),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.diNo.toString()),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(child: TableCellText(di.diName ?? '')),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.floorInfo ?? ''),
+                                  ),
+                                ),
+
+                                // Map/SOP 파일명은 길 수 있으니 Tooltip + 말줄임
+                                DataCell(
+                                  Center(
+                                    child: Tooltip(
+                                      message: di.mapImageFileName ?? '',
+                                      child: TableCellText(
+                                        di.mapImageFileName ?? '',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: Tooltip(
+                                      message: di.sopImageFileName ?? '',
+                                      child: TableCellText(
+                                        di.sopImageFileName ?? '',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      alertLevelDesc(di.alertLevelCd),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      alertCategoryDesc(di.alertCategoryCd),
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      di.isAlertReceivable ?? '',
+                                    ),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(
+                                      alertStatusDesc(di.alertStatusType),
+                                    ),
+                                  ),
+                                ),
+
+                                // 기본 연결 문자열(가변 폭 셀): 좌측 정렬 + Tooltip + 말줄임
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Tooltip(
+                                            message:
+                                                di.defaultConnectionString ??
+                                                '',
+                                            child: TableCellText(
+                                              di.defaultConnectionString ?? '',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.formatCreateAt()),
+                                  ),
+                                ),
+                                DataCell(
+                                  Center(
+                                    child: TableCellText(di.formatUpdatedAt()),
+                                  ),
+                                ),
+                              ]
+                              // 공통 텍스트 스타일(필요 시): 이미 TableCellText 내부에서 처리 중이면 생략 가능
+                              .map(
+                                (c) => DataCell(
+                                  DefaultTextStyle.merge(
+                                    style: const TextStyle(fontSize: 14),
+                                    child: c.child,
+                                  ),
+                                ),
+                              )
+                              .toList(),
                     );
                   }),
                 ),

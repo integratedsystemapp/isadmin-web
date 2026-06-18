@@ -38,7 +38,7 @@ class UserScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('사용자 관리', style: TextStyle(color: Colors.black)),
+            Text('User Management', style: TextStyle(color: Colors.black)),
 
             const Spacer(),
             // 수정

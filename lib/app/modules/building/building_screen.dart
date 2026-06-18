@@ -25,7 +25,7 @@ class BuildingScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('빌딩 관리', style: TextStyle(color: Colors.black)),
+            Text('Building Management', style: TextStyle(color: Colors.black)),
 
             const Spacer(),
 

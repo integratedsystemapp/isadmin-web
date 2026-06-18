@@ -26,7 +26,7 @@ class EdgeScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('Edge 관리', style: TextStyle(color: Colors.black)),
+            Text('AgentEdge Management', style: TextStyle(color: Colors.black)),
 
             const Spacer(),
 
