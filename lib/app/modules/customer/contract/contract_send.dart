@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 
 /// 팝업에서 돌려줄 결과
 class ContractSendModel {
-  final bool? isSendToMobile;   // 발송 여부 (휴대전화)
-  final String? managerName;       // 담당자 성명
-  final String? managerEmail;       // 담당자 이메일
-  final String? managerMobile;      // 담당자 휴대전화
-  final String? message;       // 발송 메시지
-  final String? companyName;       // 회사명
-  final String? companyCd;       // 회사코드
+  final bool? isSendToMobile; // 발송 여부 (휴대전화)
+  final String? managerName; // 담당자 성명
+  final String? managerEmail; // 담당자 이메일
+  final String? managerMobile; // 담당자 휴대전화
+  final String? message; // 발송 메시지
+  final String? companyName; // 회사명
+  final String? companyCd; // 회사코드
   ContractSendModel({
     this.isSendToMobile,
     this.managerName,
@@ -44,7 +44,6 @@ class ContractInitData {
 
 /// GetX Controller: 상태/검증/전송(API) 담당
 class ContractSendController extends GetxController {
-
   static ContractSendController get to {
     if (Get.isRegistered<ContractSendController>()) {
       return Get.find<ContractSendController>();
@@ -52,7 +51,6 @@ class ContractSendController extends GetxController {
       return Get.put(ContractSendController());
     }
   }
-
 
   // UI 상태
   final isLoading = false.obs;
@@ -62,15 +60,15 @@ class ContractSendController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   // 읽기전용 값들
-  late  String companyCd;
-  late  String companyName;
-  late  String bizNo;
-  late  String ceoName;
+  late String companyCd;
+  late String companyName;
+  late String bizNo;
+  late String ceoName;
 
   // 입력 컨트롤러
-  late  TextEditingController managerNameCtrl;
-  late  TextEditingController managerEmailCtrl;
-  late  TextEditingController managerMobileCtrl;
+  late TextEditingController managerNameCtrl;
+  late TextEditingController managerEmailCtrl;
+  late TextEditingController managerMobileCtrl;
   final TextEditingController messageCtrl = TextEditingController();
 
   // 발송 여부
@@ -121,14 +119,20 @@ class ContractSendController extends GetxController {
         isSendToMobile: sendMobile.value,
         companyName: companyName,
         companyCd: companyCd,
-        managerName: managerNameCtrl.text.trim().isEmpty ? null : managerNameCtrl.text.trim(),
-        managerEmail: managerEmailCtrl.text.trim().isEmpty ? null : managerEmailCtrl.text.trim(),
-        managerMobile: managerMobileCtrl.text.trim().isEmpty
-            ? null
-            : managerMobileCtrl.text.trim(),
-        message: messageCtrl.text.trim().isEmpty
-            ? null
-            : messageCtrl.text.trim(),
+        managerName:
+            managerNameCtrl.text.trim().isEmpty
+                ? null
+                : managerNameCtrl.text.trim(),
+        managerEmail:
+            managerEmailCtrl.text.trim().isEmpty
+                ? null
+                : managerEmailCtrl.text.trim(),
+        managerMobile:
+            managerMobileCtrl.text.trim().isEmpty
+                ? null
+                : managerMobileCtrl.text.trim(),
+        message:
+            messageCtrl.text.trim().isEmpty ? null : messageCtrl.text.trim(),
       );
 
       Get.back(result: result);
@@ -191,7 +195,10 @@ class _ContractSendDialog extends StatelessWidget {
       child: Row(
         children: [
           if (required)
-            const Text('*', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            const Text(
+              '*',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
           Flexible(child: Text(text)),
         ],
       ),
@@ -215,163 +222,203 @@ class _ContractSendDialog extends StatelessWidget {
                 child: Form(
                   key: ctrl.formKey,
                   child: Column(
-                    children: [
-                      if (ctrl.errorText.value != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: MaterialBanner(
-                            padding: const EdgeInsets.all(8),
-                            content: Text(
-                              ctrl.errorText.value!,
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            leading: const Icon(Icons.error_outline),
-                            backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                            actions: [
-                              TextButton(
-                                onPressed: () => ctrl.errorText.value = null,
-                                child: const Text('닫기'),
-                              )
-                            ],
-                          ),
-                        ),
+                    children:
+                        [
+                              if (ctrl.errorText.value != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: MaterialBanner(
+                                    padding: const EdgeInsets.all(8),
+                                    content: Text(
+                                      ctrl.errorText.value!,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                    leading: const Icon(Icons.error_outline),
+                                    backgroundColor:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.errorContainer,
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => ctrl.errorText.value = null,
+                                        child: const Text('닫기'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
 
-                      // 회사코드
-                      Row(children: [
-                        _label('회사코드'),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            initialValue: ctrl.companyCd,
-                            decoration: _roHint('회사코드 수정불가'),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 회사코드
+                              Row(
+                                children: [
+                                  _label('회사코드'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: ctrl.companyCd,
+                                      decoration: _roHint('회사코드 수정불가'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 회사명
-                      Row(children: [
-                        _label('회사명'),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            initialValue: ctrl.companyName,
-                            decoration: _roHint('(수정불가)'),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 회사명
+                              Row(
+                                children: [
+                                  _label('회사명'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: ctrl.companyName,
+                                      decoration: _roHint('(수정불가)'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 사업자 등록번호
-                      Row(children: [
-                        _label('사업자 등록번호'),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            initialValue: ctrl.bizNo,
-                            decoration: _roHint('(수정불가)'),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 사업자 등록번호
+                              Row(
+                                children: [
+                                  _label('사업자 등록번호'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: ctrl.bizNo,
+                                      decoration: _roHint('(수정불가)'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 대표자
-                      Row(children: [
-                        _label('대표자'),
-                        Expanded(
-                          child: TextFormField(
-                            readOnly: true,
-                            initialValue: ctrl.ceoName,
-                            decoration: _roHint('(수정불가)'),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 대표자
+                              Row(
+                                children: [
+                                  _label('대표자'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      readOnly: true,
+                                      initialValue: ctrl.ceoName,
+                                      decoration: _roHint('(수정불가)'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 담당자 성명
-                      Row(children: [
-                        _label('담당자 성명'),
-                        Expanded(
-                          child: TextFormField(
-                            controller: ctrl.managerNameCtrl,
-                            decoration: _editHint('담당자 성명을 입력하세요'),
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 담당자 성명
+                              Row(
+                                children: [
+                                  _label('담당자 성명'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: ctrl.managerNameCtrl,
+                                      decoration: _editHint('담당자 성명을 입력하세요'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 담당자 이메일
-                      Row(children: [
-                        _label('담당자 이메일'),
-                        Expanded(
-                          child: TextFormField(
-                            controller: ctrl.managerEmailCtrl,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: _editHint('이메일 주소를 입력하세요'),
-                            validator: (v) {
-                              if ((v ?? '').isEmpty) return null; // 선택 입력
-                              final ok = RegExp(r'^[^@]+@[^@]+\.[^@]+$').hasMatch(v!);
-                              return ok ? null : '이메일 형식을 확인해주세요';
-                            },
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 담당자 이메일
+                              Row(
+                                children: [
+                                  _label('담당자 이메일'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: ctrl.managerEmailCtrl,
+                                      keyboardType: TextInputType.emailAddress,
+                                      decoration: _editHint('이메일 주소를 입력하세요'),
+                                      validator: (v) {
+                                        if ((v ?? '').isEmpty)
+                                          return null; // 선택 입력
+                                        final ok = RegExp(
+                                          r'^[^@]+@[^@]+\.[^@]+$',
+                                        ).hasMatch(v!);
+                                        return ok ? null : '이메일 형식을 확인해주세요';
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 담당자 휴대전화 + 발송/미발송
-                      Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        _label('담당자 휴대전화', required: true),
-                        Row(children: [
-                          Radio<bool>(
-                            value: true,
-                            groupValue: ctrl.sendMobile.value,
-                            onChanged: (v) => ctrl.sendMobile.value = v!,
-                          ),
-                          const Text('발송'),
-                          const SizedBox(width: 8),
-                          Radio<bool>(
-                            value: false,
-                            groupValue: ctrl.sendMobile.value,
-                            onChanged: (v) => ctrl.sendMobile.value = v!,
-                          ),
-                          const Text('미발송'),
-                        ]),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TextFormField(
-                            controller: ctrl.managerMobileCtrl,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            decoration: _editHint('DB값이 있으면 호출 (수정 가능)'),
-                            validator: (v) {
-                              if (ctrl.sendMobile.value) {
-                                if ((v ?? '').isEmpty) return '휴대전화 번호를 입력하세요';
-                                if (v!.length < 9 || v.length > 12) return '휴대전화 자리수를 확인해주세요';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ]),
-                      const SizedBox(height: 8),
+                              // 담당자 휴대전화 + 발송/미발송
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  _label('담당자 휴대전화', required: true),
+                                  Row(
+                                    children: [
+                                      Radio<bool>(
+                                        value: true,
+                                        groupValue: ctrl.sendMobile.value,
+                                        onChanged:
+                                            (v) => ctrl.sendMobile.value = v!,
+                                      ),
+                                      const Text('발송'),
+                                      const SizedBox(width: 8),
+                                      Radio<bool>(
+                                        value: false,
+                                        groupValue: ctrl.sendMobile.value,
+                                        onChanged:
+                                            (v) => ctrl.sendMobile.value = v!,
+                                      ),
+                                      const Text('미발송'),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: ctrl.managerMobileCtrl,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      decoration: _editHint(
+                                        'DB값이 있으면 호출 (수정 가능)',
+                                      ),
+                                      validator: (v) {
+                                        if (ctrl.sendMobile.value) {
+                                          if ((v ?? '').isEmpty)
+                                            return '휴대전화 번호를 입력하세요';
+                                          if (v!.length < 9 || v.length > 12)
+                                            return '휴대전화 자리수를 확인해주세요';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
 
-                      // 발송 메시지
-                      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        _label('발송 메시지'),
-                        Expanded(
-                          child: TextFormField(
-                            controller: ctrl.messageCtrl,
-                            maxLines: 3,
-                            decoration: _editHint('사용자 입력'),
-                          ),
-                        ),
-                      ]),
-                    ]
-                        .map((w) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: w,
-                    ))
-                        .toList(),
+                              // 발송 메시지
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _label('발송 메시지'),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: ctrl.messageCtrl,
+                                      maxLines: 3,
+                                      decoration: _editHint('사용자 입력'),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]
+                            .map(
+                              (w) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: w,
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
               ),
@@ -401,61 +448,3 @@ class _ContractSendDialog extends StatelessWidget {
     });
   }
 }
-
-/// 샘플: MaterialApp (Material 3) 설정과 호출 예
-/*
-class DemoApp extends StatelessWidget {
-  const DemoApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Contract Send Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF3F5FDB),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: OutlineInputBorder(),
-          isDense: true,
-        ),
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Material 3 + GetX Dialog')),
-        body: Center(
-          child: FilledButton.icon(
-            icon: const Icon(Icons.send),
-            label: const Text('계약서 발송 팝업 열기'),
-            onPressed: () async {
-
-
-              final data = ContractInitData(
-                companyCd: 'BP20250006',
-                companyName: 'ACME',
-                bizNo: '123-45-67890',
-                ceoName: '홍길동',
-                managerName: '김담당',
-                managerEmail: 'kim@example.com',
-                managerMobile: '01012345678',
-              );
-
-              final res = await openContractSendDialog(data);
-              if (res != null) {
-                Get.snackbar(
-                  '결과',
-                  '발송: ${res.sendToMobile}, 휴대폰: ${res.mobileNo ?? '-'}, 메시지: ${res.message ?? '-'}',
-                  snackPosition: SnackPosition.BOTTOM,
-                  duration: const Duration(seconds: 3),
-                );
-              }
-
-
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
- */
