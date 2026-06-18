@@ -30,8 +30,9 @@ class DashboardScreen extends GetView<DashboardController> {
                           borderRadius: BorderRadius.circular(8),
                           child: Image.asset(
                             'assets/images/dashboard_banner.png',
-                            fit: BoxFit.contain,
-                            alignment: Alignment.topCenter,
+                            fit: BoxFit.cover,
+                            alignment: Alignment(0, -0.6),
+                            //alignment: Alignment.topCenter,
                           ),
                         ),
                       ),
