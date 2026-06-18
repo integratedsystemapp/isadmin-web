@@ -38,9 +38,9 @@ class UserScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('User Management', style: TextStyle(color: Colors.black)),
+            // Text('User Management', style: TextStyle(color: Colors.black)),
 
-            const Spacer(),
+            // const Spacer(),
             // 수정
             ElevatedButton(
               onPressed: () async {

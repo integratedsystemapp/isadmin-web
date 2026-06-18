@@ -27,8 +27,8 @@ class CustomerScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('고객사 관리', style: TextStyle(color: Colors.black)),
-            const Spacer(),
+            // Text('Customer Management', style: TextStyle(color: Colors.black)),
+            // const Spacer(),
             // 등록
             ElevatedButton(
               onPressed: () async {

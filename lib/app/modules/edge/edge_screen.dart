@@ -26,9 +26,9 @@ class EdgeScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('AgentEdge Management', style: TextStyle(color: Colors.black)),
+            // Text('AgentEdge Management', style: TextStyle(color: Colors.black)),
 
-            const Spacer(),
+            // const Spacer(),
 
             // 등록
             ElevatedButton(

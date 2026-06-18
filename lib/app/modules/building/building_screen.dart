@@ -25,9 +25,9 @@ class BuildingScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('Building Management', style: TextStyle(color: Colors.black)),
+            // Text('Building Management', style: TextStyle(color: Colors.black)),
 
-            const Spacer(),
+            // const Spacer(),
 
             // 등록
             ElevatedButton(

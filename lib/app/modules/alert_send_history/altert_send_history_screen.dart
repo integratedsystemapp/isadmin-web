@@ -29,9 +29,9 @@ class AlertSendHistoryScreen extends StatelessWidget {
         title: Row(
           children: [
             SizedBox(width: 10),
-            Text('Send History', style: TextStyle(color: Colors.black)),
+            // Text('Send History', style: TextStyle(color: Colors.black)),
 
-            const Spacer(),
+            // const Spacer(),
             IconButton(
               tooltip: 'Refresh',
               onPressed: () => controller.refreshAll(),
