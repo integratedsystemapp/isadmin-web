@@ -17,7 +17,7 @@ class DashboardScreen extends GetView<DashboardController> {
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: constraints.maxWidth, // ✅ 가로 제약 추가
-                  minHeight: constraints.maxHeight, // 기존 유지
+                  //minHeight: constraints.maxHeight, // 기존 유지
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
